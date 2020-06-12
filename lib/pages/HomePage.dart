@@ -14,43 +14,34 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  static String _email, _password;   // _ : means the variable is private
-  LocalAuthenticationService _localAuth = LocalAuthenticationService(); // make an object from LocalAuthenticationService to access fingerprint auth
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // use GlobalKey to uniquely identify the Form and validate the inputs when state change
-  final FirebaseAuth _auth = FirebaseAuth.instance;  // make an object from FirebaseAuth to access authentication methods
-
-  /* async\await :
-      make asynchronous code so the method can have a parallel execution
-      *other code can run and don't have to wait for this method to execute*
-
-     Future :
-       It's the result of async function.
-       It means getting a value for the function called, sometime later in the future.
-   */
+  static String _email, _password;   
+  LocalAuthenticationService _localAuth = LocalAuthenticationService(); 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); 
+  final FirebaseAuth _auth = FirebaseAuth.instance;  
 
   Future logIn() async {
 
-    final formState = _formKey.currentState; // get the current Form state
-    if (formState.validate()) { // validate if every text field in the form doesn't contain errors
-      formState.save(); // Save the entered values
+    final formState = _formKey.currentState; 
+    if (formState.validate()) { 
+      formState.save(); 
       try {
-        FirebaseUser user = (await _auth.signInWithEmailAndPassword( // use firebase auth function "signInWithEmailAndPassword"
-                email: _email, password: _password))                // and send the email and password entered
+        FirebaseUser user = (await _auth.signInWithEmailAndPassword(
+                email: _email, password: _password))               
             .user;
-        if (user.isEmailVerified) { // check if the user verified his email
-          await _localAuth.authenticate();  // Fingerprint Auth
+        if (user.isEmailVerified) {
+          await _localAuth.authenticate(); 
           if(_localAuth.isAuthenticated){
-           Toast.show("Access Approved", context, // Toast is a plugin that shows floating messages easily
+           Toast.show("Access Approved", context, 
               duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
            Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Hello(email: _email))); // context : is a reference to the location of a Widget within
-              }}                                                                      // the tree structure of all the Widgets which are built.
+              context, MaterialPageRoute(builder: (context) => Hello(email: _email))); 
+              }}                                                                      
         else {
           Toast.show("Please verify your email.", context,
               duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
         }
       } catch (e) {
-        if (e.message == "The password is invalid or the user does not have a password.") { // Wrong Password
+        if (e.message == "The password is invalid or the user does not have a password.") { 
             Toast.show('Error: Password is invalid', context,
                 duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
           }
@@ -61,16 +52,15 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  // ########## User Interface ##########
   @override
   Widget build(BuildContext context) {
-    return Scaffold( // widget that makes a new page
-      body: SingleChildScrollView( // makes the page scrollable
-        child: SafeArea( // assure that no widget go outside the page boundaries
-          child: Center( // center the widgets
-            child: Column( // place every child(widget) on top of each other
+    return Scaffold( 
+      body: SingleChildScrollView( 
+        child: SafeArea(
+          child: Center(
+            child: Column( 
               children: <Widget>[
-                Container( // widget contain other widget to make it easy to position
+                Container( 
                   margin: EdgeInsets.only(top: 150.0),
                   child: Text(
                     'Welcome Back!',
@@ -81,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                SizedBox( // widget used to separate other widgets vertically(height) or horizontally(width)
+                SizedBox( 
                   height: 100,
                 ),
                 Form(
@@ -91,15 +81,15 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       children: <Widget>[
                         TextFormField(
-                          // text field
+                          
                           style: TextStyle(color: Colors.white),
-                          // ignore: missing_return
+                         
                           validator: (input) {
-                            if (input.isEmpty) { // check if input is empty
+                            if (input.isEmpty) { 
                               return 'Please type an email';
                             }
                           },
-                          onSaved: (input) => _email = input, // takes user email and store it in _email
+                          onSaved: (input) => _email = input, 
                           decoration: InputDecoration(
                             labelText: 'Email',
                             labelStyle: TextStyle(color: Color(0xFF8a8b98)),
@@ -132,13 +122,13 @@ class _HomePageState extends State<HomePage> {
                         ),
                         TextFormField(
                           style: TextStyle(color: Colors.white),
-                          // ignore: missing_return
+                       
                           validator: (input) {
-                            if (input.length < 6) { // check password length
+                            if (input.length < 6) {
                               return 'Password must have at least 6 characters';
                             }
                           },
-                          onSaved: (input) => _password = input, // takes user password and store it in _password
+                          onSaved: (input) => _password = input, 
                           decoration: InputDecoration(
                             labelText: 'Password',
                             labelStyle: TextStyle(color: Color(0xFF8a8b98)),
@@ -163,7 +153,7 @@ class _HomePageState extends State<HomePage> {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.0))),
                           ),
-                          obscureText: true, // don't show the numbers when entered
+                          obscureText: true,
                         ),
                       ],
                     ),
@@ -174,7 +164,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 60),
-                  child: Row( // place every child(widget) beside each other
+                  child: Row( 
                     children: <Widget>[
                       FlatButton(
                         child: Text(
@@ -186,7 +176,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute( // go to reset password page
+                          Navigator.push(context, MaterialPageRoute(
                                   builder: (context) => ResetPassword()));
                         },
                       ),
@@ -198,7 +188,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         child: RaisedButton(
-                          onPressed: logIn, // logIn()
+                          onPressed: logIn,
                           child: Text(
                             'Login',
                             style: TextStyle(
@@ -216,10 +206,10 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Row(
                   children: <Widget>[
-                    Expanded( // widget that has flexible size depend on the screen
+                    Expanded( 
                       child: Container(
                         margin: const EdgeInsets.only(left: 30.0, right: 4.0),
-                        child: Divider( // widget that makes a line(divider)
+                        child: Divider( 
                           color: Colors.white,
                         ),
                       ),
@@ -248,7 +238,7 @@ class _HomePageState extends State<HomePage> {
                   margin: EdgeInsets.only(top: 50),
                   child: RaisedButton(
                     onPressed: () {
-                      Navigator.push(context, // go to register page
+                      Navigator.push(context, 
                           MaterialPageRoute(builder: (context) => Register()));
                     },
                     child: Text(
