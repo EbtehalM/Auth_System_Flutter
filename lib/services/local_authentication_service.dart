@@ -12,11 +12,8 @@ class LocalAuthenticationService {
   Future<void> authenticate() async {
     try {
       isAuthenticated = await _auth.authenticateWithBiometrics(
-        // dialog text
         localizedReason: 'authenticate to access',
-        // show errors on dialog
         useErrorDialogs: true,
-        // so it doesn't return failure if the app is put to background by the system
         stickyAuth: true,
       );
     } on PlatformException catch (e) {
