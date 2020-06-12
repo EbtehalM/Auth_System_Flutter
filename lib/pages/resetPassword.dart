@@ -19,9 +19,9 @@ class _ResetPasswordState extends State<ResetPassword> {
     if (formState.validate()) {
       formState.save();
       try {
-        await _auth.sendPasswordResetEmail(email: email); // use Firebase auth function "sendPasswordResetEmail" to send a password reset email
+        await _auth.sendPasswordResetEmail(email: email); 
         Toast.show("Done! Check your email.", context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
-        Navigator.push( // go to HomePage (to login)
+        Navigator.push( 
             context, MaterialPageRoute(builder: (context) => HomePage()));
       } catch (e) {
         print(e.message);
@@ -29,7 +29,6 @@ class _ResetPasswordState extends State<ResetPassword> {
     }
   }
 
-  // ########## User Interface ##########
     @override
     Widget build(BuildContext context) {
       return Scaffold(
