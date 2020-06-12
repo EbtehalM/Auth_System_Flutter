@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 
 class Hello extends StatelessWidget {
 
-  // to get the data passed in the parameter
   String email;
   Hello({Key key, this.email}) : super (key: key);
 
 
-  // ########## User Interface ##########
   @override
   Widget build(BuildContext context) {
     return Scaffold(
