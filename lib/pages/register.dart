@@ -19,18 +19,18 @@ class _RegisterState extends State<Register> {
     if (formState.validate()) {
       formState.save();
       try {
-        FirebaseUser user = (await _auth.createUserWithEmailAndPassword(  // use Firebase auth function "createUserWithEmailAndPassword"
-                email: _email, password: _password))                     // to create a new user in the database
+        FirebaseUser user = (await _auth.createUserWithEmailAndPassword( 
+                email: _email, password: _password))                     
             .user;
-        await user.sendEmailVerification(); // Send a verification email to the user email address
+        await user.sendEmailVerification(); 
         Toast.show("Done! Check your email.", context,
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
 
-        Navigator.push( //go to HomePage so the user can login
+        Navigator.push( 
             context, MaterialPageRoute(builder: (context) => HomePage()));
       } catch (signUpError) {
         if (signUpError is PlatformException) {
-          if (signUpError.code == 'ERROR_EMAIL_ALREADY_IN_USE') { // check if the email entered is registered before
+          if (signUpError.code == 'ERROR_EMAIL_ALREADY_IN_USE') { 
             Toast.show('Error: email already registered!', context,
                 duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
           }
@@ -39,7 +39,6 @@ class _RegisterState extends State<Register> {
     }
   }
 
-  // ########## User Interface ##########
   @override
   Widget build(BuildContext context) {
     return Scaffold(
